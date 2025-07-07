@@ -1,14 +1,26 @@
 package de.wg.model;
 
-public class Member {
-	private String name;  // Attribut
-	
-	public Member(String name) {	// Konstruktor
-		this.name = name;
-	}
-	
-	public String getName() {	// Getter (kein Setter daher ist 
-		return name;			// 		   Objekt nach Erstellung unveränderlich)
-	}
+import java.io.Serializable;
 
+public class Member extends Person implements Serializable {
+    private static final long serialVersionUID = 1L;
+    
+    private Account account; // Account-Attribut für das Konto des Mitglieds
+    
+    public Member(String name) { // Konstruktor
+        super(name); // ruft Konstruktor von Person auf
+        this.account = new Account(this); // erstellt neues Account-Objekt
+    }
+    
+    public Account getAccount() {
+        return account;
+    }
+    
+    public void setAccount(Account account) { 
+        this.account = account;
+    }
+    
+    public String getName() { // Getter für Name
+        return super.getName(); // nutzt getName() der Elternklasse
+    }
 }
