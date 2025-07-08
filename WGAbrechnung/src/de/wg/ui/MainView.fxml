@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.ListView?> <VBox alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.wg.ui.MainController">
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+    </padding>
+
+    <Label text="WG-Abrechnung" style="-fx-font-size: 24px; -fx-font-weight: bold;" />
+
+    <TabPane tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
+        <tabs>
+            <Tab text="Anmeldung">
+                <VBox alignment="CENTER" spacing="15.0" prefHeight="200.0" prefWidth="200.0">
+                    <padding>
+                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                    </padding>
+                    <Label text="Anmelden" style="-fx-font-size: 18px; -fx-font-weight: bold;" />
+                    <GridPane hgap="10.0" vgap="10.0">
+                        <Label text="Benutzername:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                        <TextField fx:id="usernameField" promptText="Benutzername eingeben" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+
+                        <Label text="Passwort:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                        <PasswordField fx:id="passwordField" promptText="Passwort eingeben" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                    </GridPane>
+                    <Button fx:id="loginButton" text="Anmelden" onAction="#handleLogin" />
+                    <Label fx:id="loginMessageLabel" textFill="RED" />
+                </VBox>
+            </Tab>
+
+            <Tab text="Mitgliederverwaltung">
+                <VBox alignment="TOP_CENTER" spacing="15.0" prefHeight="200.0" prefWidth="200.0">
+                    <padding>
+                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                    </padding>
+                    <Label text="Mitglieder hinzufügen" style="-fx-font-size: 18px; -fx-font-weight: bold;" />
+                    <HBox alignment="CENTER" spacing="10.0">
+                        <Label text="Name des Mitglieds:" />
+                        <TextField fx:id="memberNameField" promptText="Name eingeben" HBox.hgrow="ALWAYS" />
+                        <Button fx:id="addMemberButton" text="Mitglied hinzufügen" onAction="#addMember" />
+                    </HBox>
+                    <Label fx:id="memberMessageLabel" textFill="GREEN" />
+                    
+                    <Label text="Alle Mitglieder" style="-fx-font-size: 16px; -fx-font-weight: bold;" VBox.margin="20 0 0 0"/>
+                    <ListView fx:id="memberListView" VBox.vgrow="ALWAYS" />
+                    <Button text="Mitglieder aktualisieren" onAction="#refreshMembers" />
+                </VBox>
+            </Tab>
+
+            <Tab text="Transaktion erfassen">
+                <VBox alignment="TOP_CENTER" spacing="15.0" prefHeight="200.0" prefWidth="200.0">
+                    <padding>
+                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                    </padding>
+                    <Label text="Neue Transaktion erfassen" style="-fx-font-size: 18px; -fx-font-weight: bold;" />
+                    <GridPane hgap="10.0" vgap="10.0">
+                        <Label text="Beschreibung:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                        <TextField fx:id="transactionDescriptionField" promptText="z.B. Wocheneinkauf" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+
+                        <Label text="Betrag:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                        <TextField fx:id="transactionAmountField" promptText="z.B. 45.50" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+                        <Label text="Datum:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                        <DatePicker fx:id="transactionDateField" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+
+                        <Label text="Zahler:" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+                        <ComboBox fx:id="transactionPayerComboBox" promptText="Zahler auswählen" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+
+                        <Label text="Begünstigte (Mehrfachauswahl):" GridPane.columnIndex="0" GridPane.rowIndex="4" />
+                        <ListView fx:id="beneficiariesListView" prefHeight="100.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+
+                    </GridPane>
+                    <Button fx:id="recordTransactionButton" text="Transaktion verbuchen" onAction="#recordTransaction" />
+                    <Label fx:id="transactionMessageLabel" textFill="BLUE" />
+                </VBox>
+            </Tab>
+
+            <Tab text="Saldenübersicht">
+                <VBox alignment="TOP_CENTER" spacing="15.0" prefHeight="200.0" prefWidth="200.0">
+                    <padding>
+                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                    </padding>
+                    <Label text="Aktuelle Salden der WG" style="-fx-font-size: 18px; -fx-font-weight: bold;" />
+                    <TableView fx:id="balanceTableView" VBox.vgrow="ALWAYS">
+                        <columns>
+                            <TableColumn fx:id="memberColumn" prefWidth="150.0" text="Mitglied" />
+                            <TableColumn fx:id="balanceColumn" prefWidth="150.0" text="Saldo (EUR)" />
+                        </columns>
+                        </TableView>
+                    <Button fx:id="refreshBalancesButton" text="Salden aktualisieren" onAction="#refreshBalances" />
+                </VBox>
+            </Tab>
+        </tabs>
+    </TabPane>
+</VBox>
