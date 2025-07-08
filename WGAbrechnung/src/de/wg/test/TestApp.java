@@ -1,15 +1,17 @@
-package de.wg.test; 
+package de.wg.test;
 
 import de.wg.exception.UngueltigerBetragException;
 import de.wg.model.*;
 import de.wg.service.Ledger;
 import de.wg.service.LoginManager;
+import de.wg.service.MemberManager;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Comparator; // Import für Comparator falls benötigt
 
 public class TestApp {
 
@@ -31,8 +33,10 @@ public class TestApp {
         System.out.println("Test 1.2: Mitglieder erstellt: " + member1.getName() + ", " + member2.getName());
         System.out.println("Test 1.2: Bob's Kontostand (initial): " + member1.getAccount().getBalance());
 
-        // Test 1.3: User-Konstruktor und verifyPassword
-        User user1 = new User("Dave", "dave_user", "hashed_password_dave");
+        // Test 1.3: User-Konstruktor und verifyPassword (Korrektur: Account muss übergeben werden)
+        // Erstellen Sie einen Dummy-Account für den User, da der User-Konstruktor nun einen Account erwartet
+        Account daveAccount = new Account(new Member("Dave_Dummy_Member")); // Dummy-Member für den Account-Besitzer
+        User user1 = new User("Dave", "dave_user", "hashed_password_dave", daveAccount);
         System.out.println("Test 1.3: User erstellt: " + user1.getName() + " (" + user1.getUsername() + ")");
         System.out.println("Test 1.3: Dave Login korrekt (richtiges PW)? " + user1.verifyPassword("hashed_password_dave")); // Erwartet: true
         System.out.println("Test 1.3: Dave Login korrekt (falsches PW)? " + user1.verifyPassword("wrong_password"));      // Erwartet: false
@@ -40,12 +44,13 @@ public class TestApp {
         // Test 1.4: Comparable für Person (und geerbte Member/User)
         List<Person> personen = new ArrayList<>();
         personen.add(new Person("Zoe"));
-        personen.add(new Member("Anna")); // Member erbt compareTo von Person
-        personen.add(new User("Ben", "ben_user", "pwd")); // User erbt compareTo von Person
+        personen.add(new Member("Anna-Test1")); // Member erbt compareTo von Person
+        // Korrektur: Auch für User einen Account erstellen
+        personen.add(new User("Ben-Test1", "ben_user_test1", "pwd_test1", new Account(new Member("Ben_Dummy_Member")))); // User erbt compareTo von Person
         personen.add(new Person("Frank"));
         System.out.println("Test 1.4: Personenliste vor Sortierung: " + personen);
-        Collections.sort(personen);
-        System.out.println("Test 1.4: Personenliste nach Sortierung: " + personen); // Erwartet: Anna, Ben, Frank, Zoe
+        Collections.sort(personen); // Vorausgesetzt, Person implementiert Comparable<Person>
+        System.out.println("Test 1.4: Personenliste nach Sortierung: " + personen); // Erwartet: Anna-Test1, Ben-Test1, Frank, Zoe
         //endregion
 
         //region Testblock 2: Account - Grundfunktionalität und Comparable (Schulden zuerst)
@@ -73,7 +78,7 @@ public class TestApp {
             System.out.println("  " + acc.getOwner().getName() + ": " + acc.getBalance() + " EUR");
         }
 
-        Collections.sort(accounts); // Sortiert nach compareTo in Account (Schulden zuerst)
+        Collections.sort(accounts); // Vorausgesetzt, Account implementiert Comparable<Account>
 
         System.out.println("Test 2.1: Kontenliste nach Sortierung (Schulden zuerst):");
         for (Account acc : accounts) {
@@ -85,9 +90,9 @@ public class TestApp {
         //region Testblock 3: Transaction - Grundfunktionalität und Comparable (nach Datum)
         System.out.println("\n--- Testblock 3: Transaction - Grundfunktionalität und Comparable ---");
 
-        Member tAlice = new Member("Alice");
-        Member tBob = new Member("Bob");
-        Member tCharlie = new Member("Charlie");
+        Member tAlice = new Member("Alice-Tx");
+        Member tBob = new Member("Bob-Tx");
+        Member tCharlie = new Member("Charlie-Tx");
 
         Transaction tx1 = new Transaction(LocalDate.of(2024, 7, 10), 50.0, tAlice, Arrays.asList(tAlice, tBob), "Miete");
         Transaction tx2 = new Transaction(LocalDate.of(2024, 7, 8), 10.0, tBob, Arrays.asList(tBob, tCharlie), "Kaffee");
@@ -103,7 +108,7 @@ public class TestApp {
             System.out.println("  " + tx.getDate() + ": " + tx.getDescription());
         }
 
-        Collections.sort(transactions); // Sortiert nach compareTo in Transaction (Datum)
+        Collections.sort(transactions); // Vorausgesetzt, Transaction implementiert Comparable<Transaction>
 
         System.out.println("Test 3.1: Transaktionsliste nach Sortierung (nach Datum):");
         for (Transaction tx : transactions) {
@@ -213,43 +218,57 @@ public class TestApp {
         System.out.println("Test 6.1: Max Schulden in RuleSet (Standard): " + ruleSet.getMaxSchulden());
 
         // Test 6.2: Login erfolgreich ohne Schuldenhinweis
-        User normalUser = new User("Normalo", "normalo_user", "normal_pwd");
+        // Korrektur: Account für normalUser übergeben
+        User normalUser = new User("Normalo", "normalo_user", "normal_pwd", new Account(new Member("Normalo_Dummy_Member")));
         System.out.println("Test 6.2: Login 'Normalo': " + loginManager.login(normalUser, "normal_pwd"));
 
         // Test 6.3: Login fehlgeschlagen (falsches Passwort)
         System.out.println("Test 6.3: Login 'Normalo' (falsches PW): " + loginManager.login(normalUser, "wrong_pwd"));
 
-     // Test 6.4: Login mit Schuldenhinweis
-        // ACHTUNG: Hier wurde der ursprüngliche Code entfernt, da Member keine getPasswordHash() hat.
-        // Für den Test der Schuldenprüfung im LoginManager, erstellen wir einen User, der ein AccountHolder sein soll.
-        // Das ist eine potentielle Stelle für Refactoring in Phase 2/3 (z.B. User extends Person implements AccountHolder)
+        // Korrektur: Die folgenden Zeilen sind Duplikate oder fehl am Platz und werden entfernt oder refaktoriert.
+        // `anna` ist bereits in Test 1.1/1.4 definiert. `userMax`, `tom`, `lisa` sind ebenfalls bereits verwendet/definiert.
+        // Der folgende Block sollte `schuldenMember` und `schuldenUser` richtig verwenden, die bereits in Test 6.4 korrekt waren.
         
-        // Hier simulieren wir einen User, der auch ein AccountHolder ist, um den LoginManager zu testen.
-        // In einer realen Anwendung müsste die Vererbung/Interfaces entsprechend angepasst werden.
+        // Test 6.4: Login mit Schuldenhinweis - Anpassung an AccountHolder-User
+        // Diese Instanzen können direkt verwendet werden, da sie hier erstellt und genutzt werden.
         Member schuldenMember = new Member("Schuldner");
         schuldenMember.getAccount().updateBalance(-150.0); // Mehr als 100 Schulden
-
-        // Um LoginManager zu testen, der einen User erwartet, muss der "Schuldner" auch ein User sein.
-        // Hier erstellen wir einen temporären User, der die Eigenschaften des Members widerspiegelt.
-        // Beachten Sie, dass dies eine Vereinfachung für den Test ist und die Modellierung in Phase 2 überdacht werden sollte.
-        class TestUserWithAccount extends User implements AccountHolder {
-            private Account account;
-
-            public TestUserWithAccount(String name, String username, String passwordHash, Account account) {
-                super(name, username, passwordHash);
-                this.account = account;
-            }
-
-            @Override
-            public Account getAccount() {
-                return account;
-            }
-        }
-        
-        TestUserWithAccount schuldenUser = new TestUserWithAccount(schuldenMember.getName(), schuldenMember.getName().toLowerCase() + "_user", "schuldner_pwd", schuldenMember.getAccount());
+        User schuldenUser = new User(schuldenMember.getName(), schuldenMember.getName().toLowerCase() + "_user", "schuldner_pwd", schuldenMember.getAccount());
 
         System.out.println("Test 6.4: Login 'Schuldner' (als User mit Schulden): " + loginManager.login(schuldenUser, "schuldner_pwd"));
         // Erwartet: Login erfolgreich. Hinweis: Schuldner hat -150.0 EUR Schulden und überschreitet das Limit von 100.0 EUR.
+        //endregion
+
+        //region Testblock 7: MemberManager - Grundfunktionalität
+        System.out.println("\n--- Test 7: MemberManager ---");
+
+        MemberManager memberManager = new MemberManager();
+
+        // Korrektur: Verwenden Sie neue, eindeutige Member-Objekte für den MemberManager-Test,
+        // um Konflikte mit zuvor erstellten Membern mit gleichen Namen zu vermeiden.
+        // Oder fangen Sie die IllegalArgumentException ab, wenn Sie absichtlich Duplikate hinzufügen wollen.
+        // Ich erstelle hier neue Members mit eindeutigen Namen für diesen Testblock.
+        Member m1 = new Member("MaxMustermann");
+        Member m2 = new Member("LenaMeier");
+        Member m3 = new Member("TimSchulze");
+        Member m4 = new Member("AnnaMueller"); // Neue Anna für diesen Testblock
+
+        try {
+            memberManager.addMember(m1);
+            memberManager.addMember(m2);
+            memberManager.addMember(m3);
+            memberManager.addMember(m4);
+            System.out.println("Mitglieder erfolgreich dem MemberManager hinzugefügt.");
+        } catch (IllegalArgumentException e) {
+            System.err.println("Fehler beim Hinzufügen von Mitgliedern zum MemberManager: " + e.getMessage());
+        }
+
+        System.out.println("\nAlle Mitglieder im MemberManager:");
+        List<Member> allMembers = memberManager.getAllMembers();
+        for (Member m : allMembers) {
+            System.out.println("- " + m.getName() + " (Saldo: " + m.getAccount().getBalance() + " EUR)");
+        }
+        System.out.println("Anzahl der Mitglieder: " + allMembers.size());
         //endregion
 
         System.out.println("\n--- Ende der Testausführung ---");
