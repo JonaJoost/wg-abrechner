@@ -1,6 +1,7 @@
 package de.wg.model;
 
 import java.io.Serializable;
+
 /**
  * Repräsentiert ein WG-Mitglied.
  * Erbt von Person und implementiert AccountHolder.

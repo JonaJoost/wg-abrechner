@@ -1,10 +1,12 @@
-// Klasse zur Verwaltung der Benutzeranmeldung und Prüfung von Schuldenregeln
 package de.wg.service;
 
-import de.wg.model.Member;
 import de.wg.model.User;
 import de.wg.model.RuleSet;
+import de.wg.model.AccountHolder;
 
+/**
+ * Klasse zur Verwaltung der Benutzeranmeldung und Prüfung von Schuldenregeln
+ */
 public class LoginManager {
 
     private RuleSet ruleSet;
@@ -22,11 +24,11 @@ public class LoginManager {
 
         String hinweis = null;
 
-        // Wenn User gleichzeitig ein Member ist -> Saldo prüfen
-        if (user instanceof Member) {
-            Member m = (Member) user;
-            double saldo = m.getAccount().getBalance();
-            hinweis = ruleSet.getHinweisWennSchuldenZuHoch(m.getName(), saldo);
+        // Prüfung ob User Account-Funktionalität hat
+        if (user instanceof AccountHolder) {
+            AccountHolder accountHolder = (AccountHolder) user;
+            double saldo = accountHolder.getAccount().getBalance();
+            hinweis = ruleSet.getHinweisWennSchuldenZuHoch(accountHolder.getName(), saldo);
         }
 
         if (hinweis != null) {
@@ -35,4 +37,4 @@ public class LoginManager {
             return "Login erfolgreich.";
         }
     }
-} 
+}
