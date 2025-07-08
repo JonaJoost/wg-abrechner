@@ -3,7 +3,7 @@ package de.wg.model;
 
 import java.io.Serializable;
 
-public class Person implements Serializable {
+public class Person implements Serializable, Comparable<Person> {
 	private static final long serialVersionUID = 1L;
 	
 	protected String name;
@@ -28,6 +28,11 @@ public class Person implements Serializable {
 	@Override
 	public String toString() {
 		return name;
+	}
+
+	@Override
+	public int compareTo(Person other) {
+	    return this.name.compareTo(other.getName());
 	}
 
 }
