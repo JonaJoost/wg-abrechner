@@ -1,8 +1,11 @@
 package de.wg.model;
 
 import java.io.Serializable;
-
-public class Member extends Person implements Serializable {
+/**
+ * Repräsentiert ein WG-Mitglied.
+ * Erbt von Person und implementiert AccountHolder.
+ */
+public class Member extends Person implements AccountHolder, Serializable {
     private static final long serialVersionUID = 1L;
     
     private Account account; // Account-Attribut für das Konto des Mitglieds
