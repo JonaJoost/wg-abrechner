@@ -14,7 +14,9 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.control.ListView?> <VBox alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.wg.ui.MainController">
+<?import javafx.scene.control.ListView?>
+
+<VBox alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.wg.ui.MainController">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
@@ -54,7 +56,11 @@
                     </HBox>
                     <Label fx:id="memberMessageLabel" textFill="GREEN" />
                     
-                    <Label text="Alle Mitglieder" style="-fx-font-size: 16px; -fx-font-weight: bold;" VBox.margin="20 0 0 0"/>
+                    <Label text="Alle Mitglieder" style="-fx-font-size: 16px; -fx-font-weight: bold;">
+                        <VBox.margin>
+                            <Insets top="20.0" />
+                        </VBox.margin>
+                    </Label>
                     <ListView fx:id="memberListView" VBox.vgrow="ALWAYS" />
                     <Button text="Mitglieder aktualisieren" onAction="#refreshMembers" />
                 </VBox>
@@ -99,7 +105,7 @@
                             <TableColumn fx:id="memberColumn" prefWidth="150.0" text="Mitglied" />
                             <TableColumn fx:id="balanceColumn" prefWidth="150.0" text="Saldo (EUR)" />
                         </columns>
-                        </TableView>
+                    </TableView>
                     <Button fx:id="refreshBalancesButton" text="Salden aktualisieren" onAction="#refreshBalances" />
                 </VBox>
             </Tab>
