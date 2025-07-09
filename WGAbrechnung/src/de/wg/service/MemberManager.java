@@ -41,44 +41,46 @@ public class MemberManager implements Serializable {
     /**
      * Gibt eine unveränderliche Liste aller verwalteten Mitglieder zurück.
      *
-     * @return Eine Liste aller Mitglieder.
+     * @return Eine unveränderliche Liste von Member-Objekten.
      */
     public List<Member> getAllMembers() {
         return Collections.unmodifiableList(members);
     }
 
     /**
-     * Sucht Mitglieder anhand eines Teils ihres Namens.
-     * Die Suche ist nicht Groß- / Kleinschreibung-sensitiv.
+     * Sucht ein Mitglied anhand seines Namens.
      *
-     * @param searchTerm Der Suchbegriff (Teil des Namens).
-     * @return Eine Liste von Mitgliedern, deren Namen den Suchbegriff enthalten.
-     * Gibt eine leere Liste zurück, wenn der Suchbegriff null oder leer ist.
+     * @param name Der Name des zu suchenden Mitglieds.
+     * @return Das Member-Objekt, falls gefunden, sonst null.
      */
-    public List<Member> searchMembersByName(String searchTerm) {
-        if (searchTerm == null || searchTerm.isBlank()) {
-            return new ArrayList<>();
+    public Member getMemberByName(String name) {
+        for (Member member : members) {
+            if (member.getName().equals(name)) {
+                return member;
+            }
         }
-        String lowerCaseSearchTerm = searchTerm.toLowerCase();
-        return members.stream()
-                .filter(member -> member.getName().toLowerCase().contains(lowerCaseSearchTerm))
-                .collect(Collectors.toList());
+        return null;
     }
 
     /**
-     * Sortiert alle Mitglieder alphabetisch nach ihrem Namen.
+     * Entfernt ein Mitglied aus der Verwaltung.
      *
-     * @return Eine neue Liste der Mitglieder, sortiert nach Namen.
+     * @param member Das zu entfernende Member-Objekt.
+     * @return True, wenn das Mitglied erfolgreich entfernt wurde, sonst false.
      */
-    public List<Member> sortMembersByName() {
-        List<Member> sortedMembers = new ArrayList<>(members);
-        Collections.sort(sortedMembers, Comparator.comparing(Member::getName));
-        return sortedMembers;
+    public boolean removeMember(Member member) {
+        return this.members.remove(member);
     }
 
     /**
-     * Speichert den aktuellen Zustand des MemberManager-Objekts (und damit alle verwalteten Mitglieder)
-     * in einer Datei unter dem angegebenen Dateinamen.
+     * Sortiert die Mitglieder alphabetisch nach Namen.
+     */
+    public void sortMembersByName() {
+        Collections.sort(this.members, Comparator.comparing(Member::getName));
+    }
+
+    /**
+     * Speichert den aktuellen Zustand des MemberManager-Objekts in einer Datei.
      *
      * @param filename Der Pfad und Dateiname, unter dem die Daten gespeichert werden sollen.
      * @throws IOException Falls ein Fehler beim Schreiben der Datei auftritt.
@@ -113,4 +115,4 @@ public class MemberManager implements Serializable {
             return new MemberManager(); // Wenn Datei nicht existiert, starte mit neuem Manager
         }
     }
-    }
+}
