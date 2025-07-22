@@ -1,20 +1,24 @@
 package de.wg.model;
 
+import de.wg.ui.*;
+
 /**
- * Interface für Objekte, die ein Konto besitzen können.
- * Wird von Klassen implementiert, die Account-Funktionalität benötigen.
+ * Interface fÃ¼r Objekte, die ein Konto besitzen kÃ¶nnen. Wird von Klassen
+ * implementiert, die Account-FunktionalitÃ¤t benÃ¶tigen.
  */
 public interface AccountHolder {
-    
-    /**
-     * Gibt das Konto des Account-Inhabers zurück.
-     * @return Das Account-Objekt
-     */
-    Account getAccount();
-    
-    /**
-     * Gibt den Namen des Account-Inhabers zurück.
-     * @return Der Name als String
-     */
-    String getName();
+
+	/**
+	 * Gibt das Konto des Account-Inhabers zurÃ¼ck.
+	 * 
+	 * @return Das Account-Objekt
+	 */
+	Account getAccount();
+
+	/**
+	 * Gibt den Namen des Account-Inhabers zurÃ¼ck.
+	 * 
+	 * @return Der Name als String
+	 */
+	String getName();
 }

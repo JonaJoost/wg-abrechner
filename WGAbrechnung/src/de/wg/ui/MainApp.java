@@ -7,80 +7,106 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-
 import java.io.IOException;
+
+/**
+ * Einstiegspunkt der JavaFX-basierten WG-Verwaltungsanwendung.
+ * 
+ * Diese Klasse lädt beim Start die gespeicherten Daten (Mitglieder und
+ * Transaktionen), zeigt das Hauptfenster (MainView.fxml) und speichert die
+ * Daten automatisch beim Beenden.
+ */
 
 public class MainApp extends Application {
 
-    private Ledger ledger;
-    private MemberManager memberManager;
+	/** Verwalter für alle Transaktionen. */
+	private Ledger ledger;
+	/** Verwalter für alle Mitglieder. */
+	private MemberManager memberManager;
 
-    @Override
-    public void init() throws Exception {
-        super.init();
-        // Hier k�nnen Sie die Manager laden oder neu initialisieren
-        try {
-            memberManager = MemberManager.loadFromFile("members.ser");
-            ledger = Ledger.loadFromFile("ledger.ser");
-        } catch (IOException | ClassNotFoundException e) {
-            System.err.println("Fehler beim Laden der Daten: " + e.getMessage());
-            memberManager = new MemberManager();
-            ledger = new Ledger();
-            System.out.println("Neue MemberManager und Ledger Instanzen erstellt.");
-        }
-    }
+	/**
+	 * Initialisierung vor dem Starten der JavaFX-Oberfläche. Lädt gespeicherte
+	 * Daten oder erstellt neue Instanzen bei Fehlern.
+	 *
+	 * @throws Exception wenn ein unerwarteter Fehler auftritt
+	 */
+	@Override
+	public void init() throws Exception {
+		super.init();
+		try {
+			memberManager = MemberManager.loadFromFile("members.ser");
+			ledger = Ledger.loadFromFile("ledger.ser");
+		} catch (IOException | ClassNotFoundException e) {
+			System.err.println("Fehler beim Laden der Daten: " + e.getMessage());
+			memberManager = new MemberManager();
+			ledger = new Ledger();
+			System.out.println("Neue MemberManager und Ledger Instanzen erstellt.");
+		}
+	}
 
-    @Override
-    public void start(Stage primaryStage) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("MainView.fxml"));
-            Parent root = loader.load();
+	/**
+	 * Startet die JavaFX-Oberfläche, lädt das Hauptfenster und übergibt die Manager
+	 * an den Controller.
+	 *
+	 * @param primaryStage die Hauptbühne (Stage) der JavaFX-Anwendung
+	 */
+	@Override
+	
+	public void start(Stage primaryStage) {
+		try {
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("MainView.fxml"));
+			Parent root = loader.load();
 
-            // Controller-Instanz abrufen und Manager setzen
-            MainController controller = loader.getController();
-            if (controller != null) {
-                controller.setManagers(ledger, memberManager);
-                System.out.println("MainApp: setManagers wurde aufgerufen.");
-            } else {
-                System.err.println("MainApp: MainController konnte nicht geladen werden.");
-            }
+			// Controller abrufen und Datenmanager übergeben
+			MainController controller = loader.getController();
+			if (controller != null) {
+				controller.setManagers(ledger, memberManager);
+				System.out.println("MainApp: setManagers wurde aufgerufen.");
+			} else {
+				System.err.println("MainApp: MainController konnte nicht geladen werden.");
+			}
 
-            Scene scene = new Scene(root, 800, 600);
+			// JavaFX-Szene aufbauen
+			Scene scene = new Scene(root, 800, 600);
 
-            primaryStage.setTitle("WG-Verwaltung (JavaFX)");
-            primaryStage.setScene(scene);
-            primaryStage.show();
+			primaryStage.setTitle("WG-Verwaltung (JavaFX)");
+			primaryStage.setScene(scene);
+			primaryStage.show();
 
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.err.println("Fehler beim Laden der MainView.fxml: " + e.getMessage());
-            // Optional: Eine Alert-Box anzeigen, um dem Benutzer den Fehler mitzuteilen
-            // Alert alert = new Alert(Alert.AlertType.ERROR);
-            // alert.setTitle("Fehler");
-            // alert.setHeaderText("Anwendungsfehler");
-            // alert.setContentText("Die Anwendung konnte nicht gestartet werden: " + e.getMessage());
-            // alert.showAndWait();
-        }
-    }
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.err.println("Fehler beim Laden der MainView.fxml: " + e.getMessage());
+		}
+	}
 
-    @Override
-    public void stop() throws Exception {
-        super.stop();
-        // Daten beim Beenden der Anwendung automatisch speichern
-        try {
-            if (memberManager != null) {
-                memberManager.saveToFile("members.ser");
-            }
-            if (ledger != null) {
-                ledger.saveToFile("ledger.ser");
-            }
-            System.out.println("Daten beim Beenden der Anwendung gespeichert.");
-        } catch (IOException e) {
-            System.err.println("Fehler beim automatischen Speichern der Daten: " + e.getMessage());
-        }
-    }
+	/**
+	 * Speichert beim Beenden der Anwendung automatisch alle Daten (Mitglieder und
+	 * Transaktionen).
+	 *
+	 * @throws Exception wenn beim Speichern ein Fehler auftritt
+	 */
+	@Override
+	public void stop() throws Exception {
+		super.stop();
+		try {
+			if (memberManager != null) {
+				memberManager.saveToFile("members.ser");
+			}
+			if (ledger != null) {
+				ledger.saveToFile("ledger.ser");
+			}
+			System.out.println("Daten beim Beenden der Anwendung gespeichert.");
+		} catch (IOException e) {
+			System.err.println("Fehler beim automatischen Speichern der Daten: " + e.getMessage());
+		}
+	}
 
-    public static void main(String[] args) {
-        launch(args);
-    }
+	/**
+	 * Hauptmethode zum Start der Anwendung.
+	 *
+	 * @param args Kommandozeilenargumente (nicht verwendet)
+	 */
+	public static void main(String[] args) {
+		launch(args);
+	}
 }

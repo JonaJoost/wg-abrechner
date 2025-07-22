@@ -1,104 +1,113 @@
 package de.wg.test;
+
 import de.wg.model.*;
-import de.wg.service.*; // Importieren Sie MemberManager und Ledger
-import de.wg.exception.*; // Importieren Sie auch UngueltigerBetragException
+import de.wg.service.*; 
+import de.wg.exception.*; 
 
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Testanwendung zur Demonstration der WG-Verwaltungsfunktionen.
+ * 
+ * LÃ¤dt persistierte Daten (Mitglieder und Transaktionen), erstellt bei Bedarf
+ * Beispieldaten und zeigt alle relevanten Informationen wie Mitgliederliste,
+ * Transaktionen und Salden an. Am Ende speichert sie den Zustand wieder in
+ * Dateien.
+ */
 public class TestApp {
 
-    private static final String MEMBERS_FILE = "members.dat"; // Dateiname für Mitgliederdaten
-    private static final String LEDGER_FILE = "ledger.dat";   // Dateiname für Transaktionsdaten
+	/** Dateiname zur Speicherung der Mitgliederdaten. */
+	private static final String MEMBERS_FILE = "members.dat";
+	/** Dateiname zur Speicherung der Transaktionsdaten. */
+	private static final String LEDGER_FILE = "ledger.dat";
 
-    public static void main(String[] args) {
+	/**
+	 * Einstiegspunkt der Anwendung. FÃ¼hrt alle Testaktionen durch: Laden, Erzeugen,
+	 * Anzeigen und Speichern von Mitgliedern und Transaktionen.
+	 *
+	 * @param args Programmargumente (nicht verwendet)
+	 */
+	public static void main(String[] args) {
 
-        // 1. MemberManager laden oder neu erstellen
-        MemberManager memberManager;
-        try {
-            memberManager = MemberManager.loadFromFile(MEMBERS_FILE);
-            System.out.println("Geladene Mitglieder: " + memberManager.getAllMembers().size());
-        } catch (IOException | ClassNotFoundException e) {
-            System.err.println("Fehler beim Laden der Mitglieder: " + e.getMessage());
-            memberManager = new MemberManager();
-            System.out.println("Neuer MemberManager erstellt.");
-        }
+		// 1. Lade den MemberManager oder erstelle einen neuen, falls Datei nicht
+		// existiert
+		MemberManager memberManager;
+		try {
+			memberManager = MemberManager.loadFromFile(MEMBERS_FILE);
+			System.out.println("Geladene Mitglieder: " + memberManager.getAllMembers().size());
+		} catch (IOException | ClassNotFoundException e) {
+			System.err.println("Fehler beim Laden der Mitglieder: " + e.getMessage());
+			memberManager = new MemberManager();
+			System.out.println("Neuer MemberManager erstellt.");
+		}
 
-        // 2. Ledger laden oder neu erstellen
-        Ledger ledger;
-        try {
-            ledger = Ledger.loadFromFile(LEDGER_FILE);
-            System.out.println("Geladene Transaktionen: " + ledger.getAllTransactions().size());
-        } catch (IOException | ClassNotFoundException e) {
-            System.err.println("Fehler beim Laden des Ledgers: " + e.getMessage());
-            ledger = new Ledger();
-            System.out.println("Neues Ledger erstellt.");
-        }
+		// 2. Lade das Ledger oder erstelle ein neues
+		Ledger ledger;
+		try {
+			ledger = Ledger.loadFromFile(LEDGER_FILE);
+			System.out.println("Geladene Transaktionen: " + ledger.getAllTransactions().size());
+		} catch (IOException | ClassNotFoundException e) {
+			System.err.println("Fehler beim Laden des Ledgers: " + e.getMessage());
+			ledger = new Ledger();
+			System.out.println("Neues Ledger erstellt.");
+		}
 
-        // Füge nur Daten hinzu, wenn der Manager und das Ledger neu sind (oder leer geladen wurden)
-        if (memberManager.getAllMembers().isEmpty() && ledger.getAllTransactions().isEmpty()) {
-            System.out.println("\nErstelle Beispieldaten...");
-            Member anna = new Member("Anna");
-            Member tom = new Member("Tom");
-            Member lisa = new Member("Lisa");
+		// 3. Beispiel-Daten nur hinzufÃ¼gen, wenn beides leer ist
+		if (memberManager.getAllMembers().isEmpty() && ledger.getAllTransactions().isEmpty()) {
+			System.out.println("\nErstelle Beispieldaten...");
+			Member anna = new Member("Anna");
+			Member tom = new Member("Tom");
+			Member lisa = new Member("Lisa");
 
-            memberManager.addMember(anna);
-            memberManager.addMember(tom);
-            memberManager.addMember(lisa);
+			// Mitglieder erstellen
+			memberManager.addMember(anna);
+			memberManager.addMember(tom);
+			memberManager.addMember(lisa);
 
-            try {
-                Transaction einkauf = new Transaction(
-                        LocalDate.now(),
-                        30.0,
-                        tom,
-                        Arrays.asList(tom, lisa),
-                        "Wocheneinkauf"
-                );
-                ledger.addTransaction(einkauf);
+			// Beispiel-Transaktionen erstellen und hinzufÃ¼gen
+			try {
+				Transaction einkauf = new Transaction(LocalDate.now(), 30.0, tom, Arrays.asList(tom, lisa),
+						"Wocheneinkauf");
+				ledger.addTransaction(einkauf);
 
-                Transaction miete = new Transaction(
-                        LocalDate.now().minusDays(5),
-                        500.0,
-                        anna,
-                        Arrays.asList(anna, tom, lisa),
-                        "Miete April"
-                );
-                ledger.addTransaction(miete);
+				Transaction miete = new Transaction(LocalDate.now().minusDays(5), 500.0, anna,
+						Arrays.asList(anna, tom, lisa), "Miete April");
+				ledger.addTransaction(miete);
 
-            } catch (UngueltigerBetragException e) {
-                System.err.println("Fehler beim Hinzufügen der Transaktion: " + e.getMessage());
-            }
-        }
+			} catch (UngueltigerBetragException e) {
+				System.err.println("Fehler beim Hinzufï¿½gen der Transaktion: " + e.getMessage());
+			}
+		}
 
+		// 4. Ausgabe der Mitgliederliste
+		System.out.println("\n--- Mitgliederliste ---");
+		for (Member m : memberManager.getAllMembers()) {
+			System.out.println("Mitglied: " + m.getName());
+		}
 
-        // Anzeige der aktuellen Mitglieder
-        System.out.println("\n--- Mitgliederliste ---");
-        for (Member m : memberManager.getAllMembers()) {
-            System.out.println("Mitglied: " + m.getName());
-        }
+		// 5. Ausgabe der Transaktionshistorie
+		System.out.println("\n--- Transaktionshistorie ---");
+		for (Transaction t : ledger.getAllTransactions()) {
+			System.out.println("Datum: " + t.getDate() + ", Betrag: " + t.getAmount() + ", Zahler: "
+					+ t.getPayer().getName() + ", Beschreibung: " + t.getDescription());
+		}
 
-        // Anzeige der Transaktionen
-        System.out.println("\n--- Transaktionshistorie ---");
-        for (Transaction t : ledger.getAllTransactions()) {
-            System.out.println("Datum: " + t.getDate() + ", Betrag: " + t.getAmount() + ", Zahler: " + t.getPayer().getName() + ", Beschreibung: " + t.getDescription());
-        }
+		// 6. Ausgabe der Salden
+		System.out.println("\n--- Salden ---");
+		ledger.printAllBalances(memberManager.getAllMembers());
 
-        // Salden anzeigen (optional, nutzt die Ledger-Funktion)
-        System.out.println("\n--- Salden ---");
-        ledger.printAllBalances(memberManager.getAllMembers());
-
-
-        // Daten speichern, bevor das Programm beendet wird
-        try {
-            memberManager.saveToFile(MEMBERS_FILE);
-            ledger.saveToFile(LEDGER_FILE);
-        } catch (IOException e) {
-            System.err.println("Fehler beim Speichern der Daten: " + e.getMessage());
-        }
-
-        System.out.println("\nProgramm beendet.");
-        System.out.println("Führen Sie das Programm erneut aus, um zu sehen, wie die Daten geladen werden.");
-    }
+		// 7. Speichern der aktuellen Daten in Dateien
+		try {
+			memberManager.saveToFile(MEMBERS_FILE);
+			ledger.saveToFile(LEDGER_FILE);
+		} catch (IOException e) {
+			System.err.println("Fehler beim Speichern der Daten: " + e.getMessage());
+		}
+		// 8. Abschluss
+		System.out.println("\nProgramm beendet.");
+		System.out.println("Fï¿½hren Sie das Programm erneut aus, um zu sehen, wie die Daten geladen werden.");
+	}
 }

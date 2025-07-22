@@ -1,35 +1,55 @@
 package de.wg.model;
 
 /**
- * Enthält Regeln für die Anwendung – z.B. maximale Schulden.
- * Diese Regeln führen nicht zu Fehlern, sondern liefern Hinweistexte.
+ * EnthÃ¤lt Regeln fÃ¼r die Anwendung z.B. maximale Schulden. Diese Regeln
+ * fÃ¼hren nicht zu Fehlern, sondern liefern Hinweistexte.
  */
 public class RuleSet {
 
-    // Die maximale erlaubte Schuldenhöhe
-    private double maxSchulden = 100.0;
+	/** Die maximal erlaubte SchuldenhÃ¶he in Euro. */
+	private double maxSchulden = 100.0;
 
-    // Optional: maximale Verleihdauer in Tagen (noch nicht verwendet)
-    private int maxVerleihdauerTage = 30;
+	/** Die maximal erlaubte Verleihdauer in Tagen. */
+	private int maxVerleihdauerTage = 30;
 
-    // Konstruktor mit Standardwerten
-    public RuleSet() {
-    }
+	/**
+	 * Erstellt ein neues {@code RuleSet} mit Standardwerten.
+	 */
+	public RuleSet() {
+	}
 
-    // Getter und Setter für maxSchulden
-    public double getMaxSchulden() {
-        return maxSchulden;
-    }
+	/**
+	 * Gibt die maximal erlaubte SchuldenhÃ¶he zurÃ¼ck.
+	 *
+	 * @return der aktuelle Grenzwert fÃ¼r Schulden in Euro
+	 */
+	public double getMaxSchulden() {
+		return maxSchulden;
+	}
 
-    public void setMaxSchulden(double maxSchulden) {
-        this.maxSchulden = maxSchulden;
-    }
+	/**
+	 * Setzt die maximal erlaubte SchuldenhÃ¶he.
+	 *
+	 * @param maxSchulden der neue Grenzwert fÃ¼r Schulden in Euro
+	 */
+	public void setMaxSchulden(double maxSchulden) {
+		this.maxSchulden = maxSchulden;
+	}
 
-    // Hinweistext zurückgeben, wenn jemand zu hohe Schulden hat
-    public String getHinweisWennSchuldenZuHoch(String name, double saldo) {
-        if (saldo < -maxSchulden) {
-            return "Hinweis: " + name + " hat " + saldo + " EUR Schulden und überschreitet das Limit von " + maxSchulden + " EUR.";
-        }
-        return null; // kein Hinweis nötig
-    }
+	/**
+	 * Gibt einen Hinweistext zurÃ¼ck, wenn die Schulden einer Person das Limit
+	 * Ã¼berschreiten.
+	 *
+	 * @param name  der Name der betroffenen Person
+	 * @param saldo der aktuelle Kontostand (negativ bei Schulden)
+	 * @return ein Hinweistext, wenn das Schuldenlimit Ã¼berschritten ist, sonst
+	 *         {@code null}
+	 */
+	public String getHinweisWennSchuldenZuHoch(String name, double saldo) {
+		if (saldo < -maxSchulden) {
+			return "Hinweis: " + name + " hat " + saldo + " EUR Schulden und ï¿½berschreitet das Limit von " + maxSchulden
+					+ " EUR.";
+		}
+		return null;
+	}
 }

@@ -3,28 +3,57 @@ package de.wg.model;
 import java.io.Serializable;
 
 /**
- * Repr�sentiert ein WG-Mitglied.
- * Erbt von Person und implementiert AccountHolder.
+ * Repräsentiert ein WG-Mitglied. Erbt von {@link Person} und implementiert
+ * {@link AccountHolder}. Ein Mitglied besitzt ein eigenes
+ * {@link Account}-Objekt.
  */
+
 public class Member extends Person implements AccountHolder, Serializable {
-    private static final long serialVersionUID = 1L;
-    
-    private Account account; // Account-Attribut f�r das Konto des Mitglieds
-    
-    public Member(String name) { // Konstruktor
-        super(name); // ruft Konstruktor von Person auf
-        this.account = new Account(this); // erstellt neues Account-Objekt
-    }
-    
-    public Account getAccount() {
-        return account;
-    }
-    
-    public void setAccount(Account account) { 
-        this.account = account;
-    }
-    
-    public String getName() { // Getter f�r Name
-        return super.getName(); // nutzt getName() der Elternklasse
-    }
+	private static final long serialVersionUID = 1L;
+
+	/** Das Konto des Mitglieds. */
+	private Account account;
+
+	/**
+	 * Konstruktor zum Erzeugen eines neuen WG-Mitglieds mit einem Namen. Erstellt
+	 * gleichzeitig ein neues Konto für das Mitglied.
+	 *
+	 * @param name der Name des Mitglieds
+	 */
+
+	public Member(String name) { 
+		super(name); 
+		this.account = new Account(this); 
+	}
+
+	/**
+	 * Gibt das Konto des Mitglieds zurück.
+	 *
+	 * @return das {@link Account}-Objekt des Mitglieds
+	 */
+
+	public Account getAccount() {
+		return account;
+	}
+
+	/**
+	 * Setzt ein neues Konto für das Mitglied.
+	 *
+	 * @param account das neue {@link Account}-Objekt
+	 */
+
+	public void setAccount(Account account) {
+		this.account = account;
+	}
+
+	/**
+	 * Gibt den Namen des Mitglieds zurück. Diese Methode überschreibt ggf. die
+	 * Methode der Basisklasse.
+	 *
+	 * @return der Name des Mitglieds
+	 */
+
+	public String getName() { 
+		return super.getName(); 
+	}
 }
