@@ -16,8 +16,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-
-<AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.wg.ui.MainController">
+<?import javafx.scene.control.CheckBox?> <AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.wg.ui.MainController">
    <TabPane prefHeight="600.0" prefWidth="800.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
      <tabs>
        <Tab text="Login">
@@ -59,6 +58,11 @@
                               <children>
                                  <Label text="Name des Mitglieds:" />
                                  <TextField fx:id="memberNameField" prefWidth="200.0" promptText="Name" />
+                                 <HBox spacing="10" alignment="CENTER_LEFT">
+    								<Label text="Passwort:"/>
+    								<PasswordField fx:id="userPasswordField" promptText="Passwort"/>
+    								<CheckBox fx:id="adminCheckBox" text="Adminrechte?"/>
+								</HBox>
                                  <Button fx:id="addMemberButton" mnemonicParsing="false" onAction="#handleAddMemberButton" text="Mitglied hinzufügen" />
                               </children>
                            </HBox>
