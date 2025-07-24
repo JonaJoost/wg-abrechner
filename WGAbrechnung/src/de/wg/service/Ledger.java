@@ -87,7 +87,7 @@ public class Ledger implements Serializable {
 	public void printAllBalances(List<Member> mitglieder) {
 		for (Member m : mitglieder) {
 			double saldo = getBalance(m);
-			System.out.println(m.getName() + " hat einen Saldo von " + saldo + " EUR");
+			System.out.println(m.getName() + " hat einen Saldo von " + String.format("%.2f", saldo) + " EUR");
 		}
 	}
 
@@ -161,7 +161,7 @@ public class Ledger implements Serializable {
 				System.out.println("Ledger erfolgreich aus " + filename + " geladen.");
 				return (Ledger) obj; 
 			} else {
-				throw new IOException("Datei enth�lt kein g�ltiges Ledger-Objekt.");
+				throw new IOException("Datei enthält kein gültiges Ledger-Objekt.");
 			}
 		} catch (FileNotFoundException e) {
 			System.out.println("Die Datei '" + filename + "' wurde nicht gefunden. Ein neuer Ledger wird erstellt.");

@@ -114,6 +114,17 @@ public class MainController {
 		// Saldenübersicht Tab
 		memberColumn.setCellValueFactory(new PropertyValueFactory<>("memberName"));
 		balanceColumn.setCellValueFactory(new PropertyValueFactory<>("balance"));
+		balanceColumn.setCellFactory(column -> new TableCell<BalanceEntry, Double>() {
+            @Override
+            protected void updateItem(Double item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText(String.format("%.2f", item));
+                }
+            }
+        });		
 		balanceData = FXCollections.observableArrayList();
 		balanceTableView.setItems(balanceData);
 
