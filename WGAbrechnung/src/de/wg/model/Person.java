@@ -1,13 +1,13 @@
 package de.wg.model;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * Repräsentiert eine allgemeine Person mit einem Namen. Diese Klasse
  * implementiert {@link Serializable} für die Objekt-Serialisierung und
  * {@link Comparable}, um Personen anhand ihres Namens vergleichen zu können.
  */
-
 public class Person implements Serializable, Comparable<Person> {
 	private static final long serialVersionUID = 1L;
 
@@ -51,8 +51,7 @@ public class Person implements Serializable, Comparable<Person> {
 
 	/**
 	 * Gibt den Namen der Person als String zurück.
-	 * 
-	 * @return der Name der Person
+	 * * @return der Name der Person
 	 */
 	@Override
 	public String toString() {
@@ -64,12 +63,24 @@ public class Person implements Serializable, Comparable<Person> {
 	 *
 	 * @param other die andere Person zum Vergleich
 	 * @return ein negativer Integer, wenn diese Person lexikografisch vor
-	 *         {@code other} liegt, null wenn sie gleich sind, ein positiver Integer
-	 *         sonst
+	 * {@code other} liegt, null wenn sie gleich sind, ein positiver Integer
+	 * sonst
 	 */
 	@Override
 	public int compareTo(Person other) {
 		return this.name.compareTo(other.getName());
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Person person = (Person) o;
+		return Objects.equals(name, person.name);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(name);
+	}
 }
