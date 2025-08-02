@@ -43,7 +43,6 @@ public class LoginManager {
 
 		String hinweis = null;
 
-		// Wenn der User ein AccountHolder ist, prüfe den Kontostand
 		if (user instanceof AccountHolder) {
 			AccountHolder accountHolder = (AccountHolder) user;
 			double saldo = accountHolder.getAccount().getBalance();

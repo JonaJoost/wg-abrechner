@@ -107,17 +107,17 @@ public class MemberManager implements Serializable {
 	 */
 	public static MemberManager loadFromFile(String filename) throws IOException, ClassNotFoundException {
 		try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filename))) {
-			Object obj = ois.readObject(); // Liest das Objekt aus der Datei
+			Object obj = ois.readObject(); 
 			if (obj instanceof MemberManager) {
 				System.out.println("MemberManager erfolgreich aus " + filename + " geladen.");
-				return (MemberManager) obj; // Castet es zurück zum MemberManager
+				return (MemberManager) obj; 
 			} else {
 				throw new IOException("Datei enthält kein gültiges MemberManager-Objekt.");
 			}
 		} catch (FileNotFoundException e) {
 			System.out.println(
 					"Die Datei '" + filename + "' wurde nicht gefunden. Ein neuer MemberManager wird erstellt.");
-			return new MemberManager(); // Wenn Datei nicht existiert, starte mit neuem Manager
+			return new MemberManager(); 
 		}
 	}
 }

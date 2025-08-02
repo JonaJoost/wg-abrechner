@@ -3,8 +3,8 @@ package de.wg.model;
 import java.io.Serializable;
 
 /**
- * Repräsentiert ein Konto eines WG-Mitglieds. Jedes Mitglied ({@link Member})
- * besitzt ein solches Konto, auf dem dessen aktueller Saldo (Guthaben oder
+ * Repräsentiert ein Konto eines WG-Mitglieds. Jedes Mitglied
+ * besitzt ein solches Konto, auf welchem das aktuelle Saldo (Guthaben oder
  * Schulden) geführt wird.
  * <p>
  * Die Klasse ist {@link Serializable} für die Datenpersistenz und
@@ -12,8 +12,7 @@ import java.io.Serializable;
  * </p>
  * 
  * @author Jona
- * @version 1.0
- * @since 2024-07-08
+ * @version 1.1
  */
 public class Account implements Serializable, Comparable<Account> {
 	private static final long serialVersionUID = 1L;

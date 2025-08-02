@@ -1,8 +1,7 @@
 package de.wg.exception;
 
 /**
- * Diese Exception wird geworfen, wenn eine Transaktion einen ungültigen Betrag
- * (z.B. 0 oder negativ) enthält.
+ * Exception für ungültigen Betrag als Transaktionen
  */
 public class UngueltigerBetragException extends Exception {
 

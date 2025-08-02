@@ -15,18 +15,17 @@ import java.util.List;
  * 
  * @author Jona
  * @version 1.0
- * @since 2024-07-08
  */
 public class Transaction implements Serializable, Comparable<Transaction> {
 	private static final long serialVersionUID = 1L;
 
-	private LocalDate date; // Datum der Transaktion
-	private double amount; // Betrag der Transaktion
-	private Member payer; // Das WG-Mitglied, das die Transaktion bezahlt hat
-	private List<Member> beneficiaries; // Die WG-Mitglieder, die von der Transaktion profitieren
-	private String description; // Beschreibung der Transaktion
-	private boolean verrechnet = false; // Status, ob die Transaktion bereits verrechnet wurde
-
+	private LocalDate date;
+	private double amount;
+	private Member payer;
+	private List<Member> beneficiaries; 
+	private String description;
+	private boolean verrechnet = false;
+	
 	/**
 	 * Konstruktor für eine neue Transaktion.
 	 *
