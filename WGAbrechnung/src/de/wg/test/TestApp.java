@@ -108,6 +108,6 @@ public class TestApp {
 		}
 		// 8. Abschluss
 		System.out.println("\nProgramm beendet.");
-		System.out.println("F�hren Sie das Programm erneut aus, um zu sehen, wie die Daten geladen werden.");
+		System.out.println("Führen Sie das Programm erneut aus, um zu sehen, wie die Daten geladen werden.");
 	}
 }

@@ -54,6 +54,10 @@ public class Transaction implements Serializable, Comparable<Transaction> {
 		this.description = description;
 	}
 
+	public Transaction(Member member1, double d, String string, List<Member> beneficiaries1) {
+		// TODO Auto-generated constructor stub
+	}
+
 	/**
 	 * Gibt das Datum der Transaktion zur�ck.
 	 * 
